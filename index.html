@@ -1,0 +1,119 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>FoodBridge – Surplus Food Sharing</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E%3Ctext y='8.5' font-size='8'%3E🌿%3C/text%3E%3C/svg%3E">
+<style>
+:root{--g:#1b7a3d;--gd:#14532d;--gl:#e8f5ec;--bg:#fff;--tx:#17251c;--mu:#5b6b60;--bd:#d5e5da;--cd:#fff;--wr:#fff4d6;--er:#b42318;--bt:#fff;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--g:#4cc27a;--gd:#a7e8c0;--gl:#14301f;--bg:#0f1a13;--tx:#e6f2ea;--mu:#9bb0a2;--bd:#27402f;--cd:#16251b;--wr:#3a3216;--er:#ff8a80;--bt:#0f1a13}}
+:root[data-theme=dark]{--g:#4cc27a;--gd:#a7e8c0;--gl:#14301f;--bg:#0f1a13;--tx:#e6f2ea;--mu:#9bb0a2;--bd:#27402f;--cd:#16251b;--wr:#3a3216;--er:#ff8a80;--bt:#0f1a13}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--tx)}
+header{position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);border-bottom:1px solid var(--bd);z-index:5}
+.bar{max-width:1000px;margin:auto;padding:8px 14px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:8px;font-weight:800;font-size:20px;color:var(--g);cursor:pointer}
+nav{display:flex;gap:4px;overflow-x:auto;flex:1}nav button{background:none;border:0;color:var(--tx);padding:8px 10px;border-radius:8px;font:inherit;cursor:pointer;white-space:nowrap}nav button.on{background:var(--gl);color:var(--gd);font-weight:700}
+main{max-width:1000px;margin:auto;padding:16px 14px 40px;overflow-x:hidden}
+h1{font-size:clamp(26px,6vw,40px);line-height:1.15;margin:.2em 0}h2{margin:.2em 0 .6em}
+.hero{background:linear-gradient(135deg,var(--gl),var(--bg));border:1px solid var(--bd);border-radius:18px;padding:22px;text-align:center}
+.emo{font-size:38px;letter-spacing:6px}
+.btn{background:var(--g);color:var(--bt);border:0;border-radius:10px;padding:10px 16px;font:inherit;font-weight:700;cursor:pointer;margin:3px}.btn.o{background:none;color:var(--g);border:2px solid var(--g)}.btn.r{background:var(--er);color:#fff}.btn.s{padding:6px 10px;font-size:14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px;margin:12px 0}
+.card{background:var(--cd);border:1px solid var(--bd);border-radius:14px;padding:14px}
+.stat{text-align:center}.stat b{display:block;font-size:30px;color:var(--g)}
+.badge{display:inline-block;padding:2px 9px;border-radius:99px;font-size:12px;font-weight:700;background:var(--gl);color:var(--gd);margin-right:4px}.badge.d{background:#fde68a;color:#5b4300}.badge.x{background:#fee4e2;color:#b42318}
+.warn{background:var(--wr);border-radius:12px;padding:10px 14px;margin:12px 0;font-size:14px}
+.note{padding:10px 14px;border-radius:10px;margin:10px 0;font-weight:600;position:sticky;top:64px;z-index:4;box-shadow:0 2px 10px #0003}.note.ok{background:var(--gl);color:var(--gd)}.note.err{background:#fee4e2;color:#b42318}
+label{display:block;font-weight:600;margin:10px 0}input,select,textarea{display:block;width:100%;margin-top:4px;padding:10px;border:1px solid var(--bd);border-radius:8px;font:inherit;background:var(--bg);color:var(--tx)}
+.chk{display:flex;gap:8px;align-items:flex-start;font-weight:400}.chk input{width:auto;margin-top:5px}
+.row{display:flex;gap:10px;flex-wrap:wrap}.row>*{flex:1;min-width:140px}
+.mu{color:var(--mu);font-size:14px}.tw{overflow-x:auto}table{border-collapse:collapse;width:100%;font-size:14px}td,th{padding:8px;border-bottom:1px solid var(--bd);text-align:left;vertical-align:top}
+footer{text-align:center;color:var(--mu);font-size:13px;padding:20px}
+</style></head><body>
+<header><div class="bar"><div class="logo" onclick="nav('home')"><svg width="34" height="34" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="20" fill="var(--g)"/><path d="M6 27Q20 8 34 27M6 29h28" stroke="#fff" stroke-width="3" fill="none"/><path d="M20 17c5-1 7-5 7-8-5 0-8 3-7 8z" fill="#bfe8cc"/></svg>FoodBridge</div><nav id="nav"></nav></div></header>
+<main id="app"></main>
+<footer>FoodBridge – a student project (first version). Not a registered charity. Food safety is the responsibility of donors and recipients.</footer>
+<script>
+let uid=null,isAdmin=false,prof=null,D=[],R=[],P=[],view='home',F={q:'',c:''},demo=true,note=null;
+const CATS={'Cooked meals':'🍛','Bakery':'🍞','Fruit & vegetables':'🍎','Packaged food':'🥫','Dairy':'🥛','Other':'🍽️'};
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const live=d=>d&&d.status==='available'&&Date.parse(d.deadline)>Date.now();
+const fd=t=>new Date(t).toLocaleString([],{dateStyle:'medium',timeStyle:'short'});
+const left=t=>{let m=Math.floor((Date.parse(t)-Date.now())/6e4);return m<60?m+' min left':m<1440?Math.floor(m/60)+' h left':Math.floor(m/1440)+' days left'};
+const SL={available:'Available',reserved:'Reserved',completed:'Completed',cancelled:'Cancelled',pending:'Pending',accepted:'Accepted',rejected:'Rejected'};
+const bd=(s,x)=>`<span class="badge ${s==='rejected'||s==='cancelled'||x?'x':s==='pending'||s==='reserved'?'d':''}">${x||SL[s]||s}</span>`;
+const dm=o=>o.demo?'<span class="badge d">DEMO DATA</span>':'';
+const SAFE=`<div class="warn">⚠️ <b>Food safety:</b> Only share food that is fresh, safely stored and not expired. Keep hot food hot and cold food cold. Collect before the deadline. Check allergens before eating. Do not share food that has been partly eaten or left out for over 2 hours.</div>`;
+
+function nav(v){view=v;note=null;render(true);scrollTo(0,0)}
+function setN(t,m){note={t,m};render(true);scrollTo({top:0,behavior:'smooth'})}
+
+async function api(p,b){const r=await fetch('/api/'+p,{method:b===undefined?'GET':'POST',headers:{'content-type':'application/json'},body:b===undefined?undefined:JSON.stringify(b)});const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.error||'Request failed');return j}
+let S={all:{n:0,p:0,c:0,kg:0},real:{n:0,p:0,c:0,kg:0}};
+async function load(){try{const j=await api('state');uid=j.me?.id||null;isAdmin=j.me?.role==='admin';prof=j.me&&!isAdmin?j.me:null;D=j.donations;R=j.requests;P=j.users||[];S=j.stats;render()}catch(e){setN('err',e.message)}}
+async function save(fn,ok){try{await fn();await load();setN('ok',ok);return true}catch(e){setN('err',e.message);return false}}
+load();setInterval(()=>{if(document.visibilityState==='visible')load()},15000);
+
+function render(force){
+ if(!force&&(view==='donate'||view==='reg'))return;
+ const tabs=[['home','Home'],['food','Find Food'],['donate','Donate Food'],['dash','Dashboard'],['impact','Impact']];
+ if(isAdmin)tabs.push(['admin','Admin']);tabs.push(...(uid?[['out','Log out']]:[['auth','Login'],['reg','Register']]));
+ $('#nav').innerHTML=tabs.map(t=>`<button class="${view===t[0]?'on':''}" onclick="${t[0]==='out'?'out()':`nav('${t[0]}')`}">${t[1]}</button>`).join('');
+ $('#app').innerHTML=(note?`<div class="note ${note.t}" role="alert">${esc(note.m)}</div>`:'')+V[view]();
+}
+const need=()=>V.auth();
+function st(){return S[demo?'all':'real']}
+function st0(){const ds=D.filter(d=>demo||!d.demo),rs=R.filter(r=>demo||!r.demo),p=ds.filter(d=>d.status==='completed').reduce((s,d)=>s+(+d.qty||0),0);return{n:ds.length,p,c:rs.filter(r=>r.status==='completed').length,kg:Math.round(p*.4)}}
+const stats=()=>{const s=st();return `<div class="grid">${[['Donations listed',s.n],['Portions shared',s.p],['Pickups completed',s.c],['Est. food saved (kg)*',s.kg]].map(x=>`<div class="card stat"><b>${x[1]}</b>${x[0]}</div>`).join('')}</div><p class="mu">*Estimate only: we assume 1 portion ≈ 0.4 kg of food (our own assumption, not measured).</p>`};
+
+const V={
+home:()=>`<section class="hero"><div class="emo">🍞🥗🍛🍎</div><h1>Share extra food.<br>Feed people, not bins.</h1><p>FoodBridge connects hotels, restaurants, bakeries, hostels and households that have surplus food with charities and community kitchens that can use it.</p><button class="btn" onclick="nav('donate')">Donate Food</button><button class="btn o" onclick="nav('food')">Find Food</button></section>
+ ${stats()}<div class="grid"><div class="card"><h3>1. Donors list food</h3><p>Add what you have, how much, and the last safe time to collect.</p></div><div class="card"><h3>2. Recipients request</h3><p>Approved charities and kitchens see live listings and request a pickup.</p></div><div class="card"><h3>3. Donor decides</h3><p>The donor accepts or rejects. Contact details are shown only after acceptance.</p></div></div>${SAFE}`,
+auth:()=>uid?V.dash():`<div class="card"><h2>Login</h2><form onsubmit="return lg(event)"><label>Email<input name="email" type="email" autocomplete="username"></label><label>Password<input name="password" type="password" autocomplete="current-password"></label><button class="btn">Login</button> <button type="button" class="btn o" onclick="nav('reg')">Create account</button></form></div>`,
+reg:()=>{if(uid&&prof)return `<div class="card"><h2>You are registered</h2><p>${esc(prof.org)} (${esc(prof.type)}, ${prof.role}). ${prof.role==='recipient'&&!prof.verified?'Waiting for admin approval.':''}</p><button class="btn" onclick="nav('dash')">Go to dashboard</button></div>`;
+ return `<div class="card"><h2>Register</h2><p class="mu">Create your account. Recipients must be approved by the admin before requesting food. Your phone number is kept private until a donor accepts a request.</p><form onsubmit="return reg(event)">
+ <label>I am a<select name="t">${[['donor',['Restaurant','Hotel','Bakery','Hostel','Household']],['recipient',['Charity','Community kitchen','Authorised recipient']]].map(g=>`<optgroup label="${g[0]==='donor'?'Donor (I have food)':'Recipient (I need food)'}">${g[1].map(x=>`<option value="${g[0]}|${x}">${x}</option>`).join('')}</optgroup>`).join('')}</select></label>
+ <div class="row"><label>Email<input name="email" type="email" autocomplete="username"></label><label>Password (8+ characters)<input name="password" type="password" autocomplete="new-password"></label></div><label>Organisation / household name<input name="org" maxlength="80"></label><div class="row"><label>City / area<input name="city" maxlength="60"></label><label>Phone (kept private)<input name="phone" type="tel" maxlength="16"></label></div><button class="btn">Register</button></form></div>`},
+donate:()=>{if(!uid)return need();if(!prof||prof.role!=='donor')return `<div class="card"><h2>Donate Food</h2><p>${prof?'Only donor accounts can add food.':'Admins cannot add food. Use a donor account.'}</p></div>`;
+ return `<div class="card"><h2>Add Food Donation</h2>${SAFE}<form onsubmit="return don(event)"><div class="row"><label>Food name<input name="name" maxlength="80"></label><label>Category<select name="cat">${Object.keys(CATS).map(c=>`<option>${c}</option>`).join('')}</select></label></div>
+ <div class="row"><label>Quantity (portions)<input name="qty" type="number" min="1" max="10000"></label><label>Contact person<input name="person" maxlength="60"></label></div>
+ <div class="row"><label>Prepared at<input name="prep" type="datetime-local"></label><label>Safe collection deadline<input name="dl" type="datetime-local"></label></div>
+ <div class="row"><label>Public area (shown to everyone)<input name="loc" maxlength="60" placeholder="e.g. Kowdiar, Trivandrum"></label><label>Full pickup address (shown only after you accept)<input name="addr" maxlength="160"></label></div><label>Allergen information<input name="al" maxlength="120" placeholder="e.g. contains nuts, milk, gluten – or 'none known'"></label>
+ <p class="mu">Donor: ${esc(prof.org)}. Your registered phone and full address are shared only with the recipient whose request you accept.</p>
+ <label class="chk"><input type="checkbox" name="ok"> I confirm this food is safe, hygienically prepared and not expired.</label><button class="btn">Publish donation</button></form></div>`},
+food:()=>{const l=D.filter(d=>live(d)&&(demo||!d.demo)&&(!F.c||d.cat===F.c)&&(!F.q||(d.loc+' '+d.name).toLowerCase().includes(F.q.toLowerCase())));
+ return `<h2>Available Food</h2>${SAFE}<div class="row"><label>Search location or food<input value="${esc(F.q)}" oninput="F.q=this.value;fl()"></label><label>Category<select onchange="F.c=this.value;fl()"><option value="">All</option>${Object.keys(CATS).map(c=>`<option ${F.c===c?'selected':''}>${c}</option>`).join('')}</select></label></div><label class="chk"><input type="checkbox" ${demo?'checked':''} onchange="demo=this.checked;render(true)"> Show demo data</label><div id="fl">${fl(1)}</div>`},
+dash:()=>{if(!uid)return need();if(isAdmin)return V.admin();if(!prof)return `<div class="card"><h2>Dashboard</h2><p>Please login.</p></div>`;
+ return prof.role==='donor'?donorDash():recDash()},
+impact:()=>`<h2>Impact Dashboard</h2><label class="chk"><input type="checkbox" ${demo?'checked':''} onchange="demo=this.checked;render(true)"> Include demo data</label>${stats()}${SAFE}`,
+admin:()=>{if(!isAdmin)return '<div class="card">Admin only.</div>';const c={};D.forEach(d=>c[d.cat]=(c[d.cat]||0)+1);
+ return `<h2>Admin</h2>${stats()}<div class="card"><button class="btn" onclick="act('admin/seed',{},'Demo data loaded. It is labelled DEMO DATA.')">Load demo data</button><button class="btn o" onclick="act('admin/unseed',{},'Demo data removed.')">Remove demo data</button><p class="mu">Demo listings are fake and labelled “DEMO DATA”. Reload them when they expire.</p></div>
+ <div class="card"><h3>Reports</h3><p>Donations by category: ${Object.entries(c).map(e=>e[0]+' '+e[1]).join(', ')||'none yet'}. Requests: ${R.length} (pending ${R.filter(r=>r.status==='pending').length}).</p></div>
+ <div class="card tw"><h3>Users (${P.length})</h3><table><tr><th>Name</th><th>Role</th><th>City</th><th></th></tr>${P.map(p=>`<tr><td>${esc(p.org)}<br><span class="mu">${esc(p.email)}</span></td><td>${p.role} – ${esc(p.type)}</td><td>${esc(p.city)}</td><td>${p.role==='recipient'&&!p.verified?`<button class="btn s" onclick="ap('${p.id}')">Approve</button>`:p.role==='recipient'?'Approved':''}<button class="btn s r" onclick="rmu('${p.id}')">Remove</button></td></tr>`).join('')}</table></div>
+ <div class="card tw"><h3>Donations (${D.length})</h3><table><tr><th>Food</th><th>Donor</th><th>Status</th><th></th></tr>${D.map(d=>`<tr><td>${esc(d.name)} ${dm(d)}</td><td>${esc(d.donorOrg)}</td><td>${bd(d.status,d.status==='available'&&!live(d)?'Expired':'')}</td><td><button class="btn s r" onclick="rmd('${d.id}')">Delete</button></td></tr>`).join('')}</table></div>`}
+};
+function fl(init){const l=D.filter(d=>live(d)&&(demo||!d.demo)&&(!F.c||d.cat===F.c)&&(!F.q||(d.loc+' '+d.name).toLowerCase().includes(F.q.toLowerCase())));
+ const h=l.length?`<div class="grid">${l.map(d=>`<div class="card"><div class="emo" style="font-size:30px">${CATS[d.cat]||'🍽️'}</div><h3>${esc(d.name)}</h3><span class="badge">${esc(d.cat)}</span>${dm(d)}<p>🍽️ ${+d.qty} portions<br>📍 ${esc(d.loc)}<br>⏰ Collect before ${fd(d.deadline)} <b>(${left(d.deadline)})</b><br>🥜 Allergens: ${esc(d.al)}<br><span class="mu">From ${esc(d.donorOrg)}</span></p>${reqBtn(d)}</div>`).join('')}</div>`:'<p class="card">No food available right now that matches. Expired and past-deadline listings are hidden.</p>';
+ if(init)return h;$('#fl').innerHTML=h}
+function reqBtn(d){if(!uid)return '<button class="btn" onclick="nav(\'auth\')">Login to request</button>';if(d.donorId===uid)return '<span class="mu">Your listing</span>';if(d.demo)return '<button class="btn" onclick="setN(\'err\',\'This is demo data and cannot be requested. Add a real donation to test requests.\')">Request Pickup</button>';
+ const r=R.find(r=>r.donationId===d.id&&r.recipientId===uid&&['pending','accepted'].includes(r.status));return r?bd(r.status):`<button class="btn" onclick="reqP('${d.id}')">Request Pickup</button>`}
+
+const fv=e=>{e.preventDefault();return Object.fromEntries(new FormData(e.target))},iso=v=>isNaN(Date.parse(v))?'':new Date(v).toISOString();
+const act=(p,b,m)=>save(()=>api(p,b),m);
+async function reg(e){if(await save(()=>api('register',fv(e)),'Account created and you are logged in.')){nav('dash');setN('ok',isAdmin?'Admin account created. Open the Admin tab and load demo data.':prof&&prof.role==='donor'?'Account created. Next step: click Donate Food to add your first listing.':'Account created. Next steps: ask the admin to approve your account, then use Find Food to request a pickup.')}return false}
+async function lg(e){if(await save(()=>api('login',fv(e)),'Logged in.')){nav('dash');setN('ok','Logged in.')}return false}
+async function out(){await api('logout',{});uid=null;isAdmin=false;prof=null;await load();nav('home')}
+async function don(e){const o=fv(e);if(await save(()=>api('donations',{...o,prep:iso(o.prep),dl:iso(o.dl),ok:!!o.ok}),'Donation published. It is now visible on the Available Food page.')){nav('dash');setN('ok','Donation published. It is now visible on the Available Food page.')}return false}
+const reqP=id=>!prof||prof.role!=='recipient'?setN('err','Only registered recipient accounts can request food.'):act('requests',{donationId:id},'Request saved with status Pending. No email or SMS is sent: the donor will see it in their dashboard.');
+const acc=id=>act('requests/'+id+'/accept',{},'Request accepted. Your phone and address are now visible to that recipient only. Please tell them yourself – no message is sent automatically.');
+const rej=id=>act('requests/'+id+'/reject',{},'Request rejected.'),cxl=id=>act('requests/'+id+'/cancel',{},'Request cancelled.'),done=id=>act('requests/'+id+'/complete',{},'Marked as collected. Thank you!'),cd=id=>act('donations/'+id+'/cancel',{},'Donation cancelled.');
+const ap=id=>act('admin/approve/'+id,{},'Recipient approved.'),rmu=id=>confirm('Remove this user?')&&act('admin/rmuser/'+id,{},'User removed.'),rmd=id=>confirm('Delete this donation?')&&act('admin/rmdon/'+id,{},'Donation deleted.');
+
+const FM={pending:'waiting for the donor to respond',accepted:'accepted – see pickup details below',rejected:'was not accepted',completed:'completed',cancelled:'cancelled'};
+function feed(items){return `<div class="card"><h3>🔔 Updates</h3>${items.length?items.slice(0,6).map(t=>`<div>• ${t}</div>`).join(''):'<span class="mu">No updates yet. Updates appear here. No email or SMS is sent.</span>'}</div>`}
+function donorDash(){const mine=D.filter(d=>d.donorId===uid),mr=R.filter(r=>r.donorId===uid);
+ return `<h2>Donor dashboard</h2>${feed([...mr].sort((a,b)=>b.created-a.created).map(r=>`${esc(r.recipientOrg)} requested <b>${esc(r.donationName)}</b>: ${FM[r.status]}`))}<p>${esc(prof.org)} · <button class="btn s" onclick="nav('donate')">+ Add donation</button></p>
+ <h3>Pickup requests (${mr.length})</h3><div class="grid">${mr.map(r=>{const d=D.find(x=>x.id===r.donationId);return `<div class="card"><b>${esc(r.donationName)}</b><br>From: ${esc(r.recipientOrg)} ${bd(r.status)}${['accepted','completed'].includes(r.status)?`<br>📞 ${esc(r.recipientPhone)}`:'<br><span class="mu">Contact shown after you accept.</span>'}<br>${r.status==='pending'?`<button class="btn s" onclick="acc('${r.id}')">Accept</button><button class="btn s r" onclick="rej('${r.id}')">Reject</button>`:r.status==='accepted'?`<button class="btn s" onclick="done('${r.id}')">Mark collected</button>`:''}</div>`}).join('')||'<p class="mu">No requests yet.</p>'}</div>
+ <h3>My donations (${mine.length})</h3><div class="grid">${mine.map(d=>`<div class="card"><b>${esc(d.name)}</b> ${bd(d.status,d.status==='available'&&!live(d)?'Expired':'')}<br>${+d.qty} portions · by ${fd(d.deadline)}<br>${d.status==='available'&&live(d)?`<button class="btn s r" onclick="cd('${d.id}')">Cancel</button>`:''}</div>`).join('')||'<p class="mu">Nothing listed yet.</p>'}</div>`}
+function recDash(){const mr=R.filter(r=>r.recipientId===uid),n=D.filter(d=>live(d)&&!d.demo).length;
+ return `<h2>Recipient dashboard</h2>${feed([...mr].sort((a,b)=>b.created-a.created).map(r=>`Your request for <b>${esc(r.donationName)}</b>: ${FM[r.status]}`))}<p>${esc(prof.org)} ${prof.verified?'<span class="badge">Approved</span>':'<span class="badge d">Waiting for admin approval</span>'}</p><div class="card"><b>${n}</b> real listings available now (demo listings are separate). <button class="btn s" onclick="nav('food')">View available food</button></div>
+ <h3>My requests (${mr.length})</h3><div class="grid">${mr.map(r=>`<div class="card"><b>${esc(r.donationName)}</b> ${bd(r.status)}<br>${r.status==='accepted'?`📍 ${esc(r.pickup)}<br>👤 ${esc(r.donorPerson)} · 📞 ${esc(r.donorPhone)}<br><span class="mu">Collect before the deadline.</span>`:''}${r.status==='pending'?`<br><button class="btn s r" onclick="cxl('${r.id}')">Cancel request</button>`:''}</div>`).join('')||'<p class="mu">No requests yet.</p>'}</div>`}
+
+</script></body></html>

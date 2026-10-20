@@ -1,0 +1,1 @@
+{"name":"foodbridge","version":"1.0.0","description":"FoodBridge – Surplus Food Sharing (student project)","main":"server.js","scripts":{"start":"node server.js","test":"node test.js"},"engines":{"node":">=22.13"},"license":"MIT"}
